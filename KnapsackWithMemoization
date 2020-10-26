@@ -1,0 +1,38 @@
+#include<stdio.h>
+#define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a > _b ? _a : _b; })
+int t[100][100];
+int knapsack(int wt[],int val[],int w,int n)
+{
+    if(w==0 || n==0)
+        return 0;
+        
+    else if(t[n][w] != -1)
+        return t[n][w];
+
+    else if(wt[n-1]<=w)
+    {
+        t[n][w] = max(
+                        (val[n-1]+knapsack(wt,val,w-wt[n-1],n-1)),
+                        (knapsack(wt,val,w,n-1)) 
+                    );
+        return t[n][w];
+    }
+    else if(wt[n-1]>w) 
+    {
+        t[n][w]=knapsack(wt,val,w,n-1);
+        return t[n][w];
+    }
+}
+int main()
+{
+    int w=6;
+    int wt[]={5,4,3,2};
+    int val[]={3,1,4,7};
+    int n=4;
+    memset(t, -1, sizeof(t)); 
+    int x=knapsack(wt,val,w,n);
+    printf("%d",t[n][w]);
+}
